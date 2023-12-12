@@ -108,6 +108,27 @@ def handle_click(cell):
 def reveal_cells_around(cell):
     print("Reveal non-bomb cells around:", cell.x, cell.y)
 
+    # Calculate grid indices for the selected cell
+    cell_row = cell.x // CELL_SIZE
+    cell_col = cell.y // CELL_SIZE
+
+    # Check for bombs
+    if cell.neighbouring_bombs == 0:
+        for a_row in range(-1, 2):
+            for a_col in range(-1, 2):
+                # Calculate the row and column indices for neighboring cells
+                row = cell_row + a_row
+                col = cell_col + a_col
+
+                # Check if the indices are valid
+                if 0 <= row < amount_of_cells and 0 <= col < amount_of_cells:
+                    cell_around = cells[row][col]
+                    reveal_cells(cell_around)
+
+"""
+def reveal_cells_around(cell):
+    print("Reveal non-bomb cells around:", cell.x, cell.y)
+
     # Check for bombs
     if cell.neighbouring_bombs == 0:
         for a_row in range(-1, 2):
@@ -119,7 +140,7 @@ def reveal_cells_around(cell):
                 # Check if the indices are valid
                 if 0 <= row < amount_of_cells and 0 <= col < amount_of_cells:
                     cell_around = cells[row][col]
-                    reveal_cells(cell_around)
+                    reveal_cells(cell_around)"""
 
 
 
@@ -143,6 +164,7 @@ def reveal_cells(cell):
                         cell_around = cells[row][col]
                         # Recursively reveal neighboring cells
                         reveal_cells(cell_around)
+
 
 
 def run_setup():
