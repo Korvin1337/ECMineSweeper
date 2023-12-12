@@ -10,23 +10,37 @@ pygame.init()
 SCREEN_MIN_SIZE = 750  # Can be made to autoadjust after % of ur screen
 amount_of_cells = 16  # The amount of cells is equal in rows and columns, 16x16 (LOCKED)
 bomb_chance = 0.2  # Change to prefered value or use default 0.25
-bomb_counter = 0
-amount_of_bombs = 0
-amount_of_cells_revealed = 0
-cells_in_game = 256
+bomb_counter = 0 # Count amount of cells that are bombs
+amount_of_bombs = 0 # The amount of bomb cells that are revealed
+amount_of_cells_revealed = 0 # The amount of non bomb cells that are revealed
+cells_in_game = 256 # Made for a simple calculation to determine if you have won or not
 
-CELL_SIZE = SCREEN_MIN_SIZE // amount_of_cells  # how big can each cell be?
-READJUSTED_SIZE = CELL_SIZE * amount_of_cells
-CELL_WIDTH = CELL_HEIGHT = CELL_SIZE  # Probably not needed, just use cell_size
+"""
+    In this game(minesweeper) you can reveal cells until you have revealed either all non bomb cells or you reveal too many bombs and lose
+    You can only reveal 3 bombs before the 4th becomes the end of you!
+    G00D LÜCK!
 
-SCREEN_WIDTH, SCREEN_HEIGHT = READJUSTED_SIZE, READJUSTED_SIZE
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    !--------------HOW TO PLAY-----------------!
+    !-PRESS THE ESCAPE BUTTON TO QUIT THE GAME-!
+    !-PRESS ENTER TO RESTART THE GAME----------!
+    !-GAME RESETS AUTOMATICALLY IF WIN/LOSE----!
+    !--------------HOW TO PLAY-----------------!
+"""
 
-pygame.display.set_caption("MineSweeper")
+CELL_SIZE = SCREEN_MIN_SIZE // amount_of_cells  # Game logic variables
+READJUSTED_SIZE = CELL_SIZE * amount_of_cells # Game logic variables
+CELL_WIDTH = CELL_HEIGHT = CELL_SIZE  # Game logic variables
+SCREEN_WIDTH, SCREEN_HEIGHT = READJUSTED_SIZE, READJUSTED_SIZE # Game logic variables
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT)) # Sets the screen size
 
-cells = []
+pygame.display.set_caption("MineSweeper") # Name for the application
+
+cells = [] # Here we gather all the cells from the method create cells that are later drawn onto the screen
 
 
+"""
+    This method creates all the cells
+"""
 def create_cells():
     global amount_of_bombs
     y = -46 # Update value for each column, increase by 750 / 16 = 46
@@ -45,6 +59,9 @@ def create_cells():
     draw()
 
 
+"""
+    Here we check if there are any bombs around the cell that is being revealed
+"""
 def check_for_bombs_around_cell(cells):
     for a_row in range(amount_of_cells):
         for a_column in range(amount_of_cells):
@@ -59,6 +76,9 @@ def check_for_bombs_around_cell(cells):
                                 cell.neighbouring_bombs += 1
 
 
+"""
+    Draw the cells onto the screen
+"""
 def draw_cells():
     """In this function we want to draw each cell, i.e call upon each cells .draw() method!"""
     # Hint: take inspiration from the forloop in create_cells to loop over all the cells
@@ -67,11 +87,17 @@ def draw_cells():
             cell.draw(screen)
 
 
+"""
+    Draw method
+"""
 def draw():
     """This function handles all the drawings to the screen, such as drawing rectangles, objects etc"""
     draw_cells()
 
 
+"""
+    Handling events // Unnecessary after code updates in main? Didn´t have enough events to use this
+"""
 def event_handler(event):
     """This function handles all events in the program"""
     if event.type == pygame.QUIT:
@@ -80,6 +106,9 @@ def event_handler(event):
         left_mouse_button_click(event.pos)
 
 
+"""
+    Takes the x,y position of the mouse when you click on the screen and then sends the cell clicked to handle_click method
+"""
 def left_mouse_button_click(position):
     deadzone = 40
 
@@ -97,6 +126,9 @@ def left_mouse_button_click(position):
             ):
                 handle_click(cell)
 
+"""
+    Resets the game , resets the necessary variables again
+"""
 def reset_game():
     global bomb_counter, amount_of_cells_revealed, cells, amount_of_bombs
     bomb_counter = 0
@@ -112,6 +144,9 @@ def reset_game():
     main()
 
 
+"""
+    Here we reveal a bomb and determine if you should keep playing or lose the game
+"""
 def reveal_bomb(cell):
     global bomb_counter # Keep track of how many times a bomb has been clicked
     bomb_counter += 1
@@ -123,10 +158,15 @@ def reveal_bomb(cell):
             print("--------------------------------------------------------")
             print("-------------------You lose!----------------------------")
             counter += 1
+        print("--------------------------------------------------------")
+        print("-------------------PRESS ESCAPE TO QUIT!----------------")
         reset_game()
     # End game ? Reveal all bombs ?
 
 
+"""
+    Here we select the cells being clicked and if suitable reveal cells around it (0)
+"""
 def handle_click(cell):
     print("Clicked on cell:", cell.x, cell.y)
 
@@ -137,8 +177,10 @@ def handle_click(cell):
         reveal_cells_around(cell)
 
 
-
-# Reveals the cell that is clicked, if the cell clicked is a 0 it works together with reveal_neighbours to reveal it´s neighbours (non bombs since they are none around it)
+"""
+    Reveals the cell that is clicked, if the cell clicked is a 0 it works together with reveal_neighbours to reveal it's neighbours
+"""
+#
 def reveal_cells_around(cell):
     print("Reveal non-bomb cells around:", cell.x, cell.y)
     global amount_of_cells_revealed # Keep track of number of cells revealed
@@ -155,6 +197,9 @@ def reveal_cells_around(cell):
         reveal_neighbors(cell_row, cell_col)
 
 
+"""
+    Reveals if suitable neighbouring cells
+"""
 def reveal_neighbors(row, col):
     global amount_of_cells_revealed # Keep track of number of cells revealed
     for i in range(-1, 2):
@@ -175,7 +220,9 @@ def reveal_neighbors(row, col):
                         reveal_neighbors(new_row, new_col)
 
 
-
+"""
+    Reveals cells
+"""
 def reveal_cells(cell):
     print("Revealing cell:", cell.x, cell.y)
 
@@ -199,17 +246,26 @@ def reveal_cells(cell):
 
 
 
+"""
+    Setup, create cells
+"""
 def run_setup():
     """This function is meant to run all code that is neccesary to setup the app, happends only once"""
     create_cells()
 
 
+"""
+    Exits the program
+"""
 def terminate_program():
     """Functionality to call on whenever you want to terminate the program"""
     pygame.quit()
     sys.exit()
 
 
+"""
+    Main method that together with the information in the program determines if you are a winner or not
+"""
 def main():
     run_setup()
 
@@ -227,12 +283,13 @@ def main():
                 running = False
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 left_mouse_button_click(event.pos)
-                #print(str(amount_of_cells_revealed) + " revealed")
-                #print(str(amount_of_cells) + " cells")
-                #print(str(amount_of_bombs) + " boms")
-                #print(amount_of_cells - amount_of_bombs)
                 if(amount_of_cells_revealed == cells_in_game - amount_of_bombs):
                     win = True
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    terminate_program()
+                if event.key == pygame.K_RETURN:
+                    reset_game()
 
         draw_cells()
         pygame.display.flip()

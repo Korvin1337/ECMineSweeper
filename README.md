@@ -6,6 +6,21 @@ Efter att ha forkat och sedan klonat repositoriet:
 - Kör kommandot pip install pygame för att få hem pygame
 - Kör koden i main.py för att starta programmet!
 
+# Hur man spelar
+
+"""
+    In this game(minesweeper) you can reveal cells until you have revealed either all non bomb cells or you reveal too many bombs and lose
+    You can only reveal 3 bombs before the 4th becomes the end of you!
+    G00D LÜCK!
+
+    !--------------HOW TO PLAY-----------------!
+    !-PRESS THE ESCAPE BUTTON TO QUIT THE GAME-!
+    !-PRESS ENTER TO RESTART THE GAME----------!
+    !-GAME RESETS AUTOMATICALLY IF WIN/LOSE----!
+    !--------------HOW TO PLAY-----------------!
+"""
+
+
 ## Hur funkar spelet?
 Kort och gott: Spelet består av en 16x16 matris
 En cell (ruta) kan bestå av en bomb, klickar man en bomb förlorar man
