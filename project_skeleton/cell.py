@@ -44,6 +44,9 @@ class Cell:
                 #pygame.draw.line(screen, (255, 255, 255), (self.x, self.y), (self.x + self.width, self.y + self.height), 2)
                 #pygame.draw.line(screen, (255, 255, 255), (self.x + self.width, self.y), (self.x, self.y + self.height), 2)
 
+    def reset(self):
+        self.selected = False
+
     def print_me(self):
         print(self.x)
         print(self.y)

@@ -9,7 +9,7 @@ pygame.init()
 
 SCREEN_MIN_SIZE = 750  # Can be made to autoadjust after % of ur screen
 amount_of_cells = 16  # The amount of cells is equal in rows and columns, 16x16 (LOCKED)
-bomb_chance = 0.10  # Change to prefered value or use default 0.25
+bomb_chance = 0.2  # Change to prefered value or use default 0.25
 
 CELL_SIZE = SCREEN_MIN_SIZE // amount_of_cells  # how big can each cell be?
 READJUSTED_SIZE = CELL_SIZE * amount_of_cells
@@ -79,19 +79,26 @@ def left_mouse_button_click(position):
     for row in cells:
         for cell in row:
             if (
-                cell.x <= position[0] <= cell.x + cell.width
-                and cell.y <= position[1] <= cell.y + cell.height
-                and not (
-                    cell.x - deadzone > position[0]
-                    or position[0] > cell.x + cell.width + deadzone
-                    or cell.y + deadzone < position[1] or position[1] > cell.y + cell.height
+                cell.x <= position[0] <= cell.x + cell.width and
+                cell.y <= position[1] <= cell.y + cell.height and
+                not (
+                    cell.x - deadzone > position[0] or
+                    position[0] > cell.x + cell.width + deadzone or
+                    cell.y + deadzone < position[1] or
+                    position[1] > cell.y + cell.height
                 )
             ):
                 handle_click(cell)
 
+def reset_game():
+    for row in cells:
+        for cell in row:
+            cell.reset()
+
 def reveal_bomb(cell):
     print("Boom! You clicked a bomb!")
     cell.selected = True
+    reset_game()
     # End game ? Reveal all bombs ?
 
 
