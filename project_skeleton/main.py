@@ -117,6 +117,7 @@ def handle_click(cell):
         reveal_cells_around(cell)
 
 
+
 def reveal_cells_around(cell):
     print("Reveal non-bomb cells around:", cell.x, cell.y)
 
@@ -126,16 +127,25 @@ def reveal_cells_around(cell):
 
     # Check for bombs
     if cell.neighbouring_bombs == 0:
-        for a_row in range(-1, 2):
-            for a_col in range(-1, 2):
-                # Calculate the row and column indices for neighboring cells
-                row = cell_row + a_row
-                col = cell_col + a_col
+        reveal_neighboring_cells(cell_row, cell_col)
 
-                # Check if the indices are valid
-                if 0 <= row < amount_of_cells and 0 <= col < amount_of_cells:
-                    cell_around = cells[row][col]
-                    reveal_cells(cell_around)
+
+def reveal_neighboring_cells(row, col):
+    for i in range(-1, 2):
+        for j in range(-1, 2):
+            new_row, new_col = row + i, col + j
+
+            # Check if the indices are within bounds
+            if 0 <= new_row < amount_of_cells and 0 <= new_col < amount_of_cells:
+                cell_around = cells[new_row][new_col]
+
+                # Check if the cell is not already selected to avoid infinite recursion
+                if not cell_around.selected:
+                    cell_around.selected = True
+
+                    # If the cell has no neighboring bombs, recursively reveal its neighbors
+                    if cell_around.neighbouring_bombs == 0:
+                        reveal_neighboring_cells(new_row, new_col)
 
 
 
