@@ -10,6 +10,7 @@ pygame.init()
 SCREEN_MIN_SIZE = 750  # Can be made to autoadjust after % of ur screen
 amount_of_cells = 16  # The amount of cells is equal in rows and columns, 16x16 (LOCKED)
 bomb_chance = 0.2  # Change to prefered value or use default 0.25
+bomb_counter = 0
 
 CELL_SIZE = SCREEN_MIN_SIZE // amount_of_cells  # how big can each cell be?
 READJUSTED_SIZE = CELL_SIZE * amount_of_cells
@@ -96,9 +97,13 @@ def reset_game():
             cell.reset()
 
 def reveal_bomb(cell):
+    global bomb_counter # Keep track of how many times a bomb has been clicked
+    bomb_counter += 1
     print("Boom! You clicked a bomb!")
     cell.selected = True
-    reset_game()
+    if(bomb_counter > 3):
+        print("You lose!")
+        reset_game()
     # End game ? Reveal all bombs ?
 
 
@@ -116,8 +121,8 @@ def reveal_cells_around(cell):
     print("Reveal non-bomb cells around:", cell.x, cell.y)
 
     # Calculate grid indices for the selected cell
-    cell_row = cell.x // CELL_SIZE
-    cell_col = cell.y // CELL_SIZE
+    cell_row = cell.y // CELL_SIZE
+    cell_col = cell.x // CELL_SIZE
 
     # Check for bombs
     if cell.neighbouring_bombs == 0:
@@ -131,23 +136,6 @@ def reveal_cells_around(cell):
                 if 0 <= row < amount_of_cells and 0 <= col < amount_of_cells:
                     cell_around = cells[row][col]
                     reveal_cells(cell_around)
-
-"""
-def reveal_cells_around(cell):
-    print("Reveal non-bomb cells around:", cell.x, cell.y)
-
-    # Check for bombs
-    if cell.neighbouring_bombs == 0:
-        for a_row in range(-1, 2):
-            for a_col in range(-1, 2):
-                # Calculate the row and column indices for neighboring cells
-                row = cell.x + a_row
-                col = cell.y + a_col
-
-                # Check if the indices are valid
-                if 0 <= row < amount_of_cells and 0 <= col < amount_of_cells:
-                    cell_around = cells[row][col]
-                    reveal_cells(cell_around)"""
 
 
 
